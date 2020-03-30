@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.rbac.mapper.SystemRoleMapper">
+    <select id="list" resultType="pers.yurwisher.dota2.rbac.pojo.to.SystemRoleTo">
+        SELECT * from system_role where enabled = 1
+        <if test="qo.roleName != null and qo.roleName != ''">
+            and role_name like concat('%',#{qo.roleName},'%')
+        </if>
+        <if test="qo.roleCode != null and qo.roleCode != ''">
+            and role_code like concat('%',#{qo.roleCode},'%')
+        </if>
+        <if test="qo.description != null and qo.description != ''">
+            and description like concat('%',#{qo.description},'%')
+        </if>
+    </select>
+
+    <select id="get" resultType="pers.yurwisher.dota2.rbac.pojo.vo.SystemRoleVo">
+      SELECT role_name,description,role_code from system_role WHERE id = #{id}
+    </select>
+    <select id="getRoles" resultType="pers.yurwisher.dota2.rbac.entity.SystemRole">
+        SELECT DISTINCT r.* from user_role ur
+        LEFT JOIN system_user u on u.id = ur.user_id
+        LEFT JOIN system_role r on r.id = ur.role_id
+        where u.username = #{userName} AND r.enabled = 1
+    </select>
+
+    <select id="select" resultType="pers.yurwisher.wisp.wrapper.So">
+      SELECT id as 'value',role_name as label from system_role WHERE enabled = 1
+    </select>
+    <select id="getRolesByUserId" resultType="java.lang.String">
+        SELECT DISTINCT r.role_code from user_role ur
+        LEFT JOIN system_user u on u.id = ur.user_id
+        LEFT JOIN system_role r on r.id = ur.role_id
+        where u.id = #{userId} AND r.enabled = 1
+    </select>
+
+</mapper>

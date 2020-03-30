@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.rbac.mapper.PermissionMapper">
+
+    <select id="findAllByRoleId" resultType="pers.yurwisher.dota2.rbac.pojo.dto.PermissionNode">
+        SELECT p.permission_name as name,
+        p.id as id ,
+        p.parent_id as pid
+        from role_permission r
+        LEFT JOIN permission p on p.id = r.permission_id
+        WHERE r.role_id = #{roleId}
+        AND p.enabled = 1
+        GROUP BY p.id
+    </select>
+    <select id="findAllPermission" resultType="pers.yurwisher.dota2.rbac.pojo.dto.PermissionNode">
+        SELECT permission_name as name,id,parent_id as pid from permission
+    </select>
+    <select id="get" resultType="pers.yurwisher.dota2.rbac.pojo.vo.PermissionVo">
+        SELECT permission_name,permission_code,parent_id from permission WHERE id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.rbac.mapper.JobMapper">
+    <select id="list" resultType="pers.yurwisher.dota2.rbac.pojo.to.JobTo">
+        SELECT j.id,j.name,d.name as department,j.last_updated,j.date_created from job j
+        LEFT JOIN department d on d.id = j.department_id
+        where j.enabled = 1
+        <if test="qo.departmentId != null and qo.departmentId != ''">
+            AND d.id = #{qo.departmentId}
+        </if>
+        <if test="qo.name != null and qo.name != ''">
+            AND j.name like concat('%',#{qo.name},'%')
+        </if>
+    </select>
+
+    <select id="get" resultType="pers.yurwisher.dota2.rbac.pojo.vo.JobVo">
+      select * from job where id = #{id}
+    </select>
+    <select id="select" resultType="pers.yurwisher.wisp.wrapper.So">
+        SELECT id as 'value',name as label from job where  department_id = #{departmentId} and enabled = 1 ORDER BY row_no
+    </select>
+
+</mapper>

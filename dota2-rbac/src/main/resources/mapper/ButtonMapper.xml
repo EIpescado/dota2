@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.rbac.mapper.ButtonMapper">
+
+    <select id="get" resultType="pers.yurwisher.dota2.rbac.pojo.vo.ButtonVo">
+      select * from button where id = #{id}
+    </select>
+    <select id="allButton" resultType="pers.yurwisher.dota2.rbac.pojo.dto.TreeNode">
+        SELECT id,button_name as name ,menu_id as pid,
+        <![CDATA['BUTTON']]> as type,row_no
+        FROM button where enabled = 1 ORDER BY row_no
+    </select>
+    <select id="findAllByUserId" resultType="pers.yurwisher.dota2.rbac.pojo.dto.ButtonDto">
+        SELECT b.* from role_button rb
+        INNER JOIN button b on b.id = rb.button_id
+        INNER JOIN (
+            SELECT r.id from user_role ur
+            INNER JOIN system_user u on u.id = ur.user_id
+            INNER JOIN system_role r on r.id = ur.role_id
+            where u.id = #{userId} AND r.enabled = 1
+        ) ur on ur.id = rb.role_id
+        WHERE b.enabled = 1
+        GROUP BY b.id
+        ORDER BY b.row_no
+    </select>
+    <select id="findAllButtonIdByRoleId" resultType="java.lang.Long">
+        SELECT DISTINCT b.id from role_button rb
+        LEFT JOIN system_role r on r.id = rb.role_id
+        LEFT JOIN button b on b.id = rb.button_id
+        where r.id = #{roleId} AND r.enabled = 1
+        AND b.enabled = 1
+    </select>
+
+</mapper>

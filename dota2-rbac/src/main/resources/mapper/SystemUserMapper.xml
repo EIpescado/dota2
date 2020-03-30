@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.rbac.mapper.SystemUserMapper">
+    <update id="updatePasswordByUsername">
+        UPDATE system_user set password = #{newPassword},last_password_reset_date = #{currentTime} where username = #{username}
+    </update>
+    <update id="updateStatusById">
+        update system_user set status = #{status} where id = #{id}
+    </update>
+    <select id="list" resultType="pers.yurwisher.dota2.rbac.pojo.to.SystemUserTo">
+        SELECT id,username,register_date,last_password_reset_date
+        from system_user u
+        where  enabled = 1
+        <if test="qo.username != null and qo.username != ''">
+            and username = #{qo.username}
+        </if>
+        <if test="qo.status != null and qo.status != ''">
+          and status = #{qo.status}
+        </if>
+        order by register_date desc
+    </select>
+    <select id="countByUserNameAndPassword" resultType="java.lang.Integer">
+      select count(*) from  system_user where username = #{username}
+      <if test="password != null and password != ''">
+          and password = #{password}
+      </if>
+    </select>
+</mapper>

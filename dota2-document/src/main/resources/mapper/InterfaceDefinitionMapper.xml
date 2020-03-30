@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.document.mapper.InterfaceDefinitionMapper">
+    <select id="get" resultType="pers.yurwisher.dota2.document.pojo.vo.InterfaceDefinitionVo">
+      SELECT d.id,d.code,m.description as module,d.description,d.last_updated
+      from interface_definition d
+      LEFT JOIN dict_member m ON d.module = m.val
+      where d.id = #{id} and m.dict_name = 'MODULE'
+    </select>
+
+    <select id="findAllNode" resultType="pers.yurwisher.dota2.document.pojo.vo.InterfaceDefinitionNode">
+      SELECT id,code,module,description from interface_definition where enabled = 1
+    </select>
+
+    <select id="list" resultType="pers.yurwisher.dota2.document.pojo.to.InterfaceDefinitionTo">
+        SELECT d.id,d.code,m.description as module, d.description,
+        d.date_created,d.last_updated
+        from interface_definition d
+        LEFT JOIN dict_member m ON d.module = m.val
+        where m.dict_name = 'MODULE' AND d.enabled = 1
+        <if test="qo.code != null and qo.code != ''">
+            and d.code = #{qo.code}
+        </if>
+        <if test="qo.module != null and qo.module != ''">
+            and d.module = #{qo.module}
+        </if>
+        <if test="qo.description != null and qo.description != ''">
+            and d.description like concat('%',#{qo.description},'%')
+        </if>
+        ORDER BY d.last_updated desc
+    </select>
+
+</mapper>

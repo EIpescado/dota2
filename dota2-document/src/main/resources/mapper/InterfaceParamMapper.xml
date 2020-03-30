@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.document.mapper.InterfaceParamMapper">
+    <delete id="deleteByInterfaceId">
+        DELETE FROM interface_param where interface_id = #{interfaceId}
+    </delete>
+    <select id="getInterfaceParamByInterfaceId" resultType="pers.yurwisher.dota2.document.pojo.vo.InterfaceParamNode">
+        SELECT *,parent_id as pid from interface_param where interface_id = #{interfaceId}
+    </select>
+
+</mapper>

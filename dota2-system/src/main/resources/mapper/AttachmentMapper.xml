@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.system.mapper.AttachmentMapper">
+    <select id="list" resultType="pers.yurwisher.dota2.system.pojo.to.AttachmentTo">
+        SELECT
+        a.id,
+        a.file_type,
+        a.file_name,
+        a.upload_date,
+        s.username as uploadMen,a.file_address,a.remark
+        FROM attachment a
+        LEFT JOIN system_user s on s.id= a.upload_user_id
+        WHERE a.enabled = 1
+        <if test="qo.fileName != null and qo.fileName != ''">
+           and a.file_name like concat('%',#{qo.fileName},'%')
+        </if>
+        <if test="qo.remark != null and qo.remark != ''">
+            and a.remark like concat('%',#{qo.remark},'%')
+        </if>
+        order by a.upload_date desc
+    </select>
+
+
+</mapper>

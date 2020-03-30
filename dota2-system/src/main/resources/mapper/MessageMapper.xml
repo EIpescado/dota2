@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.system.mapper.MessageMapper">
+    <select id="webList" resultType="pers.yurwisher.dota2.system.pojo.to.MessageTo">
+        SELECT c.content, m.date_created ,sender_id = #{currentId} as self from message m
+        LEFT JOIN message_content c on m.message_id = c.id
+        where m.query_id = #{queryId} AND m.type = #{messageType}
+        order BY m.id DESC
+    </select>
+
+    <select id="systemList" resultType="pers.yurwisher.dota2.system.pojo.to.MessageTo">
+        SELECT m.id,c.title,c.content, m.date_created  from message m
+        LEFT JOIN message_content c on m.message_id = c.id
+        where m.receiver_id = #{receiverId} AND m.type = #{messageType}
+        order BY m.id DESC
+    </select>
+
+    <select id="countByReceiverIdAndTypeAndStatus" resultType="java.lang.Integer">
+        SELECT COUNT(*) from message
+        WHERE receiver_id = #{receiverId}
+        AND type = #{messageType} AND status = #{messageStatus}
+    </select>
+</mapper>

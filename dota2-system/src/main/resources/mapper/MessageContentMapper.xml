@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.system.mapper.MessageContentMapper">
+    <select id="noticeList" resultType="pers.yurwisher.dota2.system.pojo.to.MessageTo">
+      SELECT id,title,date_created from message_content
+      WHERE type = #{messageType} ORDER BY date_created DESC
+    </select>
+    <select id="findByTemplateIdAndDateCreatedGe" resultType="pers.yurwisher.dota2.system.entity.MessageContent">
+      SELECT * from message_content where  type = #{messageType}
+      and template_id = #{templateId}
+      AND date_created >= #{templateLastUpdated} limit 1
+    </select>
+    <select id="getNoticeDetail" resultType="pers.yurwisher.dota2.system.pojo.vo.MessageVo">
+      SELECT title,content,date_created from message_content
+      WHERE id = #{id} and type = #{messageType}
+    </select>
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.system.mapper.MessageTemplateMapper">
+    <select id="list" resultType="pers.yurwisher.dota2.system.pojo.to.MessageTemplateTo">
+        SELECT mt.id,mt.code,mt.name,mt.template,mt.date_created,
+        mt.last_updated,mt.whether_need_format,dm.description as type
+        FROM message_template mt
+        LEFT JOIN dict_member dm on dm.val = mt.type
+        WHERE dm.dict_name = 'MESSAGE_TEMPLATE_TYPE'
+        and mt.enabled = 1
+        <if test="qo.type != null and qo.type != ''">
+            and mt.type = #{qo.type}
+        </if>
+        <if test="qo.code != null and qo.code != ''">
+            and mt.code like concat('%',#{qo.code},'%')
+        </if>
+        <if test="qo.name != null and qo.name != ''">
+            and mt.name like concat('%',#{qo.name},'%')
+        </if>
+        ORDER BY id DESC
+    </select>
+    <select id="get" resultType="pers.yurwisher.dota2.system.pojo.vo.MessageTemplateVo">
+        select * from message_template where id = #{id}
+    </select>
+    <select id="getTemplateByTypeAndCode" resultType="pers.yurwisher.dota2.system.pojo.cache.MessageTemplateCache">
+        SELECT id,template,whether_need_format,name as templateName,last_updated  FROM message_template where type = #{type} AND code = #{code}
+    </select>
+
+
+</mapper>

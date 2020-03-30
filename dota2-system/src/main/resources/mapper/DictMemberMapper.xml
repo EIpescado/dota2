@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.system.mapper.DictMemberMapper">
+    <update id="deleteByDictName">
+        update dict_member set enabled = 0 where dict_name = #{dictName}
+    </update>
+    <select id="list" resultType="pers.yurwisher.dota2.system.pojo.to.DictMemberTo">
+      SELECT id,val,description,sort, last_updated from dict_member where dict_name = #{qo.dictName} and enabled = 1
+      <if test="qo.description != null and qo.description != ''">
+          AND description like concat('%',#{qo.description},'%')
+      </if>
+      order by sort
+    </select>
+
+    <select id="get" resultType="pers.yurwisher.dota2.system.pojo.vo.DictMemberVo">
+      SELECT val,description,sort,dict_name  from dict_member where id = #{id}
+    </select>
+    <select id="select" resultType="pers.yurwisher.wisp.wrapper.So">
+        SELECT description as 'label',val as 'value' from dict_member
+        where dict_name = #{dictName}
+        AND enabled = 1
+        ORDER BY sort
+    </select>
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.rbac.mapper.MenuMapper">
+    <select id="get" resultType="pers.yurwisher.dota2.rbac.pojo.vo.MenuVo">
+        select * from menu where id = #{id}
+    </select>
+    <select id="findAllByUserId" resultType="pers.yurwisher.dota2.rbac.pojo.dto.MenuNode">
+        SELECT m.id,
+        m.menu_name as name,
+        m.row_no as sort,
+        m.path,
+        m.component,
+        m.parent_id as pid,
+        m.redirect,
+        m.icon,m.affix,
+        m.vue_name,
+        m.hidden,
+        m.keep_alive
+        from role_menu rm
+        INNER JOIN menu m on m.id = rm.menu_id
+        where rm.role_id in
+        (
+            SELECT distinct r.id from user_role ur
+            INNER JOIN system_user u on u.id = ur.user_id
+            INNER JOIN system_role r on r.id = ur.role_id
+            where u.id = #{userId} AND r.enabled = 1
+        )
+        and m.enabled = 1
+        GROUP BY m.id
+        order by m.row_no
+    </select>
+    <select id="findAllForFullTree" resultType="pers.yurwisher.dota2.rbac.pojo.dto.TreeNode">
+        SELECT id,
+        menu_name as name,
+        parent_id as pid,
+        <![CDATA['MENU']]> as type,
+        row_no
+        from menu
+        where enabled = 1 ORDER BY row_no
+    </select>
+    <select id="findAllByRoleId" resultType="long">
+        SELECT DISTINCT m.id  from role_menu rm
+        LEFT JOIN system_role r on r.id = rm.role_id
+        LEFT JOIN menu m on m.id = rm.menu_id
+        where r.id = #{roleId} AND r.enabled = 1
+        AND m.enabled = 1
+    </select>
+
+</mapper>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pers.yurwisher.dota2.document.mapper.RequestHeadMapper">
+    <delete id="deleteByInterfaceId">
+       DELETE FROM request_head where interface_id = #{interfaceId}
+    </delete>
+    <select id="getByInterfaceId" resultType="pers.yurwisher.dota2.document.pojo.vo.RequestHeadVo">
+        SELECT * from request_head where interface_id = #{interfaceId}
+    </select>
+
+</mapper>
