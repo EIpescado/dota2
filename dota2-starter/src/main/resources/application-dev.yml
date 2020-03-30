@@ -29,6 +29,17 @@ yurwisher:
     enable: true
     secret: wahaha123
     custom-token-class: pers.yurwisher.dota2.common.wrapper.TokenPlus
+  qiniu:
+    accessKey:
+    secretKey:
+    #默认目标空间
+    bucket:
+    zone: zone2
+    #自定义响应
+    returnBody: "{\"fileUrl\":\"$(year)/$(mon)/$(day)/$(etag)${ext}\"}"
+    expires: 3600
+    #自定义文件资源名
+    saveKey: "$(year)/$(mon)/$(day)/$(etag)${ext}"
   dota2:
     #验证码长宽设置单位px
     valid-code-width: 110

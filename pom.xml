@@ -38,6 +38,7 @@
         <wisp.version>0.0.1</wisp.version>
         <morph.version>0.0.1</morph.version>
         <juggernaut.version>0.0.1</juggernaut.version>
+        <earth-shaker.version>0.0.1</earth-shaker.version>
     </properties>
 
     <dependencies>

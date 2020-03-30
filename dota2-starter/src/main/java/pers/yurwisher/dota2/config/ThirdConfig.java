@@ -1,5 +1,6 @@
 package pers.yurwisher.dota2.config;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -18,12 +19,16 @@ import pers.yurwisher.dota2.common.base.IUserInfoService;
 import pers.yurwisher.dota2.common.constant.cache.RBACCacheConstant;
 import pers.yurwisher.dota2.common.constant.cache.SystemCacheConstant;
 import pers.yurwisher.dota2.common.constant.cache.ThirdCacheConstant;
+import pers.yurwisher.dota2.common.enums.tip.ThirdCustomTipEnum;
+import pers.yurwisher.dota2.common.exception.ThirdException;
 import pers.yurwisher.dota2.common.wrapper.CustomUserInfoDetail;
 import pers.yurwisher.dota2.common.wrapper.TokenPlus;
 import pers.yurwisher.dota2.third.MessageSender;
+import pers.yurwisher.earthshaker.service.IQiniuService;
 import pers.yurwisher.token.ITokenService;
 import pers.yurwisher.token.TokenHelper;
 import pers.yurwisher.token.impl.TokenServiceImpl;
+import pers.yurwisher.wisp.utils.StringUtils;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -110,8 +115,15 @@ public class ThirdConfig {
      * 自定义文件上传
      */
     @Bean
-    public IUploadService uploadService(){
-        return stream -> "";
+    public IUploadService uploadService(IQiniuService qiniuService){
+        return stream -> {
+            String returnBody = qiniuService.upload(stream);
+            if(StringUtils.isNotEmpty(returnBody)){
+                return JSON.parseObject(returnBody).getString("fileUrl");
+            }else{
+                throw new ThirdException(ThirdCustomTipEnum.UPLOAD_FILE_FAIL);
+            }
+        };
     }
 
     /**

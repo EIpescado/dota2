@@ -23,5 +23,10 @@
             <artifactId>juggernaut</artifactId>
             <version>${juggernaut.version}</version>
         </dependency>
+        <dependency>
+            <groupId>pers.yurwisher</groupId>
+            <artifactId>earth-shaker</artifactId>
+            <version>${earth-shaker.version}</version>
+        </dependency>
     </dependencies>
 </project>
